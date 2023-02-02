@@ -1,18 +1,32 @@
 const initialState = {
-    SinhVien: {
-        maSV:"",
-        hoTen:"",
-        sdt:"",
-        email:""
-    }
+  DanhSachSinhVien: [
+
+  ],
+  svNhap: {
+    values: {
+      maSV: "",
+      hoTen: "",
+      sdt: "",
+      email: ""
+    },
+    errors: {
+      maSV: "",
+      hoTen: "",
+      sdt: "",
+      email: "",
+    },
+  }
 }
 
-export default (state = initialState, action) => {
+export const thongTinSinhVienReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "THEM_SV":
+      state.svNhap.values = action.newValue
+      state.svNhap.errors = action.newError
+      state.svNhap = {... state.svNhap}
+      return {...state}
 
-  
-
-  default:
-    return state
+    default:
+      return state
   }
 }
