@@ -29,7 +29,7 @@ class SinhVien extends Component {
         newError[name] = mesError
 
         let action = {
-            type: "THEM_SV",
+            type: "LUU_SV",
             newValue: sv,
             newError: newError,
         }
@@ -37,24 +37,53 @@ class SinhVien extends Component {
 
     }
 
+    handleOnSubmit = (event) => {
+        event.preventDefault();
+        let isValid = true;
+        let {errors,values} = this.props.svNhap; 
+        for (const key in errors) {
+            if (errors[key]!== "") {
+                isValid = false   
+            }
+        }
+
+        for (const key in values) {
+            if (values[key] ==="") {
+                isValid = false;
+                
+            }
+        }
+        if (isValid){
+            let action = {
+                type: "THEM_SV",
+                svThem: this.props.svNhap.values,
+            }
+            this.props.dispatch(action);
+        }
+        else {
+            alert("Bạn chưa nhập đầy đủ thông tin")
+        }
+    }
     render() {
         let {errors} = this.props.svNhap
+        let {maSV, hoTen, sdt, email} = this.props.svNhap.values
+        console.log(this.props.svNhap.values)
         return (
             <div className='nhapThongTin'>
                 <h1 className='alert alert-primary'>Thông tin sinh viên</h1>
-                <form>
+                <form >
                     <div className='row'>
                         <div className="col-6">
                             <div className="form-group">
                                 <label htmlFor="">Mã SV</label>
-                                <input onChange={this.handleOnChange} className="form-control" name='maSV' />
+                                <input onChange={this.handleOnChange} className="form-control" name='maSV' value={maSV}/>
                                 <p className='text-danger'>{errors.maSV}</p>
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="form-group">
                                 <label htmlFor="">Họ tên</label>
-                                <input onChange={this.handleOnChange} className="form-control" name='hoTen' />
+                                <input onChange={this.handleOnChange} className="form-control" name='hoTen' value={hoTen}/>
                                 <p className='text-danger'>{errors.hoTen}</p>
                             </div>
                         </div>
@@ -64,20 +93,26 @@ class SinhVien extends Component {
                         <div className="col-6">
                             <div className="form-group">
                                 <label htmlFor="">Số điện thoại</label>
-                                <input onChange={this.handleOnChange} className="form-control" name="sdt" typeform="sdt"/>
+                                <input onChange={this.handleOnChange} className="form-control" name="sdt" typeform="sdt" value={sdt}/>
                                 <p className='text-danger'>{errors.sdt}</p>
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="form-group">
                                 <label htmlFor="">Email</label>
-                                <input onChange={this.handleOnChange} className="form-control" name="email" typeform="email" />
+                                <input onChange={this.handleOnChange} className="form-control" name="email" typeform="email" value={email} />
                                 <p className='text-danger'>{errors.email}</p>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Thêm sinh viên</button>
+                    <button onClick={this.handleOnSubmit} type="submit" className="btn btn-primary mr-3">Thêm sinh viên</button>
+                    <button onClick={() => {
+                        let action = {
+                            type: 'CAP_NHAT',
+                        }
+                        this.props.dispatch(action)
+                    }} type='button' className='btn btn-success'> Cập nhật</button>
                 </form>
 
             </div>
